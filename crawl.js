@@ -2,6 +2,7 @@
 var zombie = require('zombie');
 var assert = require('assert');
 var util = require('util');
+var url = require('url');
 
 var visitUrl = 'http://www.cnn.com';
 
@@ -18,7 +19,14 @@ zombie.visit( visitUrl,
 		  }
 		  links = browser.querySelectorAll('a');
 		  return Array.prototype.map.call(links, function(e) {
-		      console.log( e.getAttribute('href'));
+		      href = e.getAttribute('href');
+		      var obj = url.parse(href);
+		      if (obj.protocol === undefined) {
+			  var tmp = visitUrl + href;
+			  obj = url.parse(tmp) ;
+			  href = obj.href;
+		      }
+		      console.log(href);
 		  });
 	      }
 	    );
